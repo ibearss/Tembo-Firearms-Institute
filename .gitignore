@@ -1,0 +1,43 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Google OAuth
+credentials.json
+token.json
+
+# Temporary / intermediate files
+.tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+.next/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Large binary/media assets (commit separately or use Git LFS)
+*.mp4
+*.mov
+*.avi
+tembo/assets/frames/

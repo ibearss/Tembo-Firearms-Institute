@@ -1,0 +1,2743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tembo Defensive Institute — Fort Collins, Colorado</title>
+  <meta name="description" content="Professional firearms training in Fort Collins, Colorado. Concealed carry, defensive shooting, and safety courses for all skill levels." />
+
+  <!-- Fonts (non-blocking) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&display=swap" onload="this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&display=swap" /></noscript>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
+
+  <style>
+    /* ─── RESET & BASE ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080808;
+      --surface:      #111111;
+      --card:         #151515;
+      --card-hover:   #1c1c1c;
+      --border:       rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.14);
+
+      --red:          #C41E1E;
+      --red-bright:   #E02020;
+      --red-dim:      rgba(196,30,30,0.15);
+      --gold:         #C89B3C;
+      --gold-dim:     rgba(200,155,60,0.12);
+
+      --text:         #F0EDE8;
+      --text-muted:   #6B6864;
+      --text-sub:     #9A9591;
+
+      --heading:      'Bebas Neue', sans-serif;
+      --subheading:   'Barlow Condensed', sans-serif;
+      --body:         'Inter', sans-serif;
+
+      --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+
+      --radius:       6px;
+      --radius-lg:    12px;
+      --max-w:        1180px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--body); border: none; background: none; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─── SCROLLBAR ─────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+
+    /* ─── NOISE TEXTURE ─────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* ─── NAV ───────────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 24px 0;
+      transition: padding 0.4s var(--ease-out), background 0.4s var(--ease-out), border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav.scrolled {
+      padding: 14px 0;
+      background: rgba(8, 8, 8, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom-color: var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .nav-logo-name {
+      font-family: var(--heading);
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .nav-logo-tag {
+      font-family: var(--subheading);
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--subheading);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s var(--ease-out);
+    }
+
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .nav-cta {
+      font-family: var(--subheading);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--red);
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .nav-cta:hover {
+      background: var(--red-bright);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile nav toggle */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      width: 28px;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      display: block;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s var(--ease-out), opacity 0.3s;
+    }
+
+    /* ─── HERO ──────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Tactical grid background */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(196, 30, 30, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 10% 80%, rgba(200, 155, 60, 0.05) 0%, transparent 50%),
+        linear-gradient(180deg, #0c0c0c 0%, #080808 100%);
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    /* Crosshair decoration */
+    .hero-reticle {
+      position: absolute;
+      top: 50%; right: 8%;
+      transform: translateY(-50%);
+      width: 240px; height: 240px;
+      opacity: 0.06;
+    }
+
+    .hero-reticle svg { width: 100%; height: 100%; }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding-top: 120px;
+      padding-bottom: 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--subheading);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(200,155,60,0.3);
+      padding: 7px 14px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.75); }
+    }
+
+    .hero-title {
+      font-family: var(--heading);
+      font-size: clamp(72px, 10vw, 148px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      max-width: 820px;
+      margin-bottom: 28px;
+    }
+
+    .hero-title-line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero-title-line span {
+      display: block;
+      transform: translateY(100%);
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--red);
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .hero-location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--subheading);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .hero-location svg { color: var(--red); flex-shrink: 0; }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--subheading);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--red);
+      padding: 16px 32px;
+      border-radius: var(--radius);
+      transition: background 0.2s, transform 0.2s var(--ease-out), box-shadow 0.2s;
+      box-shadow: 0 0 0 0 rgba(196, 30, 30, 0);
+    }
+
+    .btn-primary:hover {
+      background: var(--red-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(196, 30, 30, 0.35);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--subheading);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-ghost:hover { color: var(--text); border-color: var(--text-sub); }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 48px; right: 0;
+      display: flex;
+      gap: 40px;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .hero-stat {
+      text-align: right;
+    }
+
+    .hero-stat-num {
+      font-family: var(--heading);
+      font-size: 36px;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-family: var(--subheading);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 52px; left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+    }
+
+    .hero-scroll-label {
+      font-family: var(--subheading);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--text-muted), transparent);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      51% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ─── DIVIDER ───────────────────────────────────────────────── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 0 24px;
+    }
+
+    /* ─── SERVICES ──────────────────────────────────────────────── */
+    .services {
+      padding: 120px 0;
+    }
+
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-eyebrow-line {
+      width: 32px; height: 2px;
+      background: var(--red);
+      border-radius: 2px;
+    }
+
+    .section-eyebrow-text {
+      font-family: var(--subheading);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .section-title {
+      font-family: var(--heading);
+      font-size: clamp(42px, 6vw, 72px);
+      letter-spacing: 0.02em;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      color: var(--text-sub);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 64px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .service-card {
+      background: var(--card);
+      padding: 40px 36px;
+      position: relative;
+      transition: background 0.3s var(--ease-out);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease-out);
+    }
+
+    .service-card:hover { background: var(--card-hover); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      background: var(--red-dim);
+      border: 1px solid rgba(196, 30, 30, 0.2);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s var(--ease-out);
+    }
+
+    .service-card:hover .service-icon {
+      background: rgba(196, 30, 30, 0.25);
+      border-color: rgba(196, 30, 30, 0.4);
+      transform: scale(1.08);
+    }
+
+    .service-icon svg {
+      width: 22px; height: 22px;
+      color: var(--red);
+    }
+
+    .service-num {
+      position: absolute;
+      top: 32px; right: 32px;
+      font-family: var(--heading);
+      font-size: 48px;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      pointer-events: none;
+      transition: color 0.3s;
+    }
+
+    .service-card:hover .service-num { color: rgba(196,30,30,0.06); }
+
+    .service-title {
+      font-family: var(--subheading);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .service-desc {
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+
+    .service-arrow {
+      margin-top: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--subheading);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s, gap 0.2s;
+    }
+
+    .service-card:hover .service-arrow {
+      color: var(--red);
+      gap: 10px;
+    }
+
+    /* ─── WHY US ─────────────────────────────────────────────────── */
+    .why {
+      padding: 100px 0;
+      background: linear-gradient(to bottom, var(--bg), #0d0d0d, var(--bg));
+    }
+
+    .why-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .why-visual {
+      position: relative;
+    }
+
+    .why-visual-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateX(-32px);
+    }
+
+    .why-visual-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 80% 20%, rgba(196,30,30,0.06), transparent);
+      pointer-events: none;
+    }
+
+    .why-big-num {
+      font-family: var(--heading);
+      font-size: 120px;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--text);
+      display: block;
+    }
+
+    .why-big-label {
+      font-family: var(--subheading);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .why-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    .why-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .why-tag {
+      font-family: var(--subheading);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid rgba(200,155,60,0.2);
+      padding: 6px 12px;
+      border-radius: 100px;
+    }
+
+    .why-content {
+      opacity: 0;
+      transform: translateX(32px);
+    }
+
+    .why-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      margin-top: 48px;
+    }
+
+    .why-item {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .why-item-icon {
+      width: 36px; height: 36px;
+      background: var(--red-dim);
+      border: 1px solid rgba(196,30,30,0.2);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .why-item-icon svg { width: 16px; height: 16px; color: var(--red); }
+
+    .why-item-title {
+      font-family: var(--subheading);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .why-item-desc {
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.65;
+    }
+
+    /* ─── CONTACT ───────────────────────────────────────────────── */
+    .contact {
+      padding: 120px 0;
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-info {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    .contact-detail-list {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .contact-detail {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .contact-detail-icon {
+      width: 40px; height: 40px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-icon svg { width: 18px; height: 18px; color: var(--red); }
+
+    .contact-detail-label {
+      font-family: var(--subheading);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .contact-detail-value {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+
+    /* Contact form */
+    .contact-form-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: var(--subheading);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .form-label span {
+      color: var(--red);
+      margin-left: 2px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 14px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .form-select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6864' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+
+    .form-select option { background: #1a1a1a; }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: rgba(196, 30, 30, 0.5);
+      background: rgba(196, 30, 30, 0.03);
+      box-shadow: 0 0 0 3px rgba(196, 30, 30, 0.08);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--text-muted); }
+
+    .field-error {
+      border-color: rgba(196,30,30,0.6) !important;
+      box-shadow: 0 0 0 3px rgba(196,30,30,0.12) !important;
+    }
+
+    .form-submit {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: var(--subheading);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--red);
+      padding: 18px 32px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.2s var(--ease-out), box-shadow 0.2s;
+    }
+
+    .form-submit:hover {
+      background: var(--red-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(196, 30, 30, 0.3);
+    }
+
+    .form-submit:active { transform: translateY(0); }
+
+    .form-submit.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    /* Success message */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 32px;
+    }
+
+    .form-success.show { display: block; }
+
+    .form-success-icon {
+      width: 56px; height: 56px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .form-success-title {
+      font-family: var(--subheading);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .form-success-text {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .footer-logo {
+      font-family: var(--heading);
+      font-size: 20px;
+      letter-spacing: 0.06em;
+      color: var(--text);
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer-right a {
+      color: var(--text-sub);
+      transition: color 0.2s;
+    }
+
+    .footer-right a:hover { color: var(--red); }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-inner { grid-template-columns: 1fr; gap: 48px; }
+      .why-visual-card { max-width: 400px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-toggle { display: flex; }
+
+      .services-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+
+      .hero-stats {
+        position: relative;
+        bottom: auto; right: auto;
+        justify-content: flex-start;
+        margin-top: 48px;
+      }
+
+      .hero-stat { text-align: left; }
+      .hero-scroll { display: none; }
+      .hero-reticle { display: none; }
+      .why-visual-card { padding: 32px; }
+      .why-big-num { font-size: 80px; }
+      .contact-form-wrap { padding: 32px 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .btn-ghost { border-bottom: none; }
+    }
+
+    /* Mobile nav overlay */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: rgba(8, 8, 8, 0.98);
+      backdrop-filter: blur(20px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .nav-mobile.open { display: flex; }
+
+    .nav-mobile a {
+      font-family: var(--heading);
+      font-size: 48px;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .nav-mobile a:hover { color: var(--red); }
+
+    .nav-mobile-cta {
+      font-family: var(--subheading);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--red);
+      padding: 16px 40px;
+      border-radius: var(--radius);
+    }
+
+    /* ─── BULLET SCROLL INDICATOR ──────────────────────────────── */
+    .bullet-track {
+      position: fixed;
+      right: 22px;
+      top: 0;
+      height: 100vh;
+      width: 20px;
+      z-index: 60;
+      pointer-events: none;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .bullet-track-rail {
+      position: absolute;
+      width: 1px;
+      top: 8vh;
+      bottom: 8vh;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .bullet-track-fill {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 0%;
+      background: linear-gradient(to bottom, var(--gold), var(--red));
+      transition: height 0.08s linear;
+    }
+
+    .bullet-wrap {
+      position: absolute;
+      top: 8vh;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      filter: drop-shadow(0 0 5px rgba(200,155,60,0.55));
+      transition: top 0.08s linear;
+    }
+
+    @media (max-width: 768px) { .bullet-track { display: none; } }
+
+    /* ─── NAV LOGO IMAGE ────────────────────────────────────────── */
+    .nav-logo-img {
+      height: 48px;
+      width: auto;
+      max-width: 40px;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* ─── COURSE MODALS ─────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      max-width: 680px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      position: relative;
+      transform: translateY(24px);
+      transition: transform 0.35s var(--ease-out);
+      scrollbar-width: thin;
+      scrollbar-color: #2a2a2a transparent;
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0); }
+
+    .modal-header {
+      padding: 36px 40px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky;
+      top: 0;
+      background: #111;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .modal-num {
+      font-family: var(--subheading);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .modal-title {
+      font-family: var(--heading);
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 0.95;
+      color: var(--text);
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+
+    .modal-body {
+      padding: 32px 40px 40px;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .modal-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .modal-meta-label {
+      font-family: var(--subheading);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .modal-meta-val {
+      font-family: var(--subheading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .modal-desc {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-sub);
+      margin-bottom: 28px;
+    }
+
+    .modal-section-title {
+      font-family: var(--subheading);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .modal-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .modal-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+    .modal-list li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+
+    .modal-bring {
+      background: rgba(200,155,60,0.06);
+      border: 1px solid rgba(200,155,60,0.15);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+    .modal-bring strong { color: var(--gold); font-weight: 600; }
+
+    .modal-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--red);
+      color: #fff;
+      font-family: var(--subheading);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: background 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .modal-cta:hover { background: var(--red-bright); }
+
+    /* Make service cards clickable */
+    .service-card { cursor: pointer; }
+
+    @media (max-width: 600px) {
+      .modal-header { padding: 24px 24px 20px; }
+      .modal-body { padding: 24px 24px 32px; }
+    }
+
+    /* ─── VIDEO CANVAS SECTION ──────────────────────────────────── */
+    .video-section {
+      position: relative;
+      background: #000;
+    }
+
+    .video-pin {
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #videoCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Loading indicator */
+    .video-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      z-index: 10;
+      transition: opacity 0.5s ease;
+    }
+    .video-loader.hidden { opacity: 0; pointer-events: none; }
+    .video-loader-bar {
+      width: 200px;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 1px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+    .video-loader-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, var(--gold), var(--red));
+      border-radius: 1px;
+      transition: width 0.1s linear;
+    }
+    .video-loader-text {
+      font-family: var(--subheading);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Text overlays that appear at scroll keyframes */
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 0 6vw 8vh;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .video-caption {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .video-caption.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .video-caption-eyebrow {
+      font-family: var(--subheading);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .video-caption-title {
+      font-family: var(--heading);
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 0.95;
+      color: var(--text);
+      text-shadow: 0 2px 30px rgba(0,0,0,0.8);
+    }
+
+    /* Scroll hint at bottom of pinned section */
+    .video-scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--subheading);
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    /* ─── TEXT PRESSURE ──────────────────────────────────────────── */
+    .pressure-section {
+      padding: 100px 0 90px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    /* Subtle red glow behind the text */
+    .pressure-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(196,30,30,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .pressure-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      justify-content: center;
+    }
+
+    .pressure-wrap {
+      font-family: 'Roboto Flex', 'Inter', sans-serif;
+      font-size: clamp(52px, 7.2vw, 108px);
+      line-height: 1;
+      font-variation-settings: 'wght' 100, 'wdth' 75, 'slnt' 0;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: baseline;
+      gap: 0;
+      user-select: none;
+    }
+
+    .tp-char {
+      display: inline-block;
+      will-change: font-variation-settings;
+      /* No CSS transition — rAF handles all timing for 60fps smoothness */
+    }
+
+    /* Fade whole section in on scroll */
+    .pressure-section .pressure-inner {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* Touch hint shown on mobile where hover doesn't exist */
+    .pressure-touch-hint {
+      text-align: center;
+      margin-top: 24px;
+      font-family: var(--subheading);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    @media (hover: none) { .pressure-touch-hint { opacity: 1; } }
+    @media (max-width: 768px) {
+      .pressure-wrap { font-size: clamp(36px, 10vw, 72px); }
+    }
+
+    /* ─── UTILITY ────────────────────────────────────────────────── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── BULLET SCROLL INDICATOR ────────────────────────────── -->
+  <div class="bullet-track" id="bulletTrack" aria-hidden="true">
+    <div class="bullet-track-rail">
+      <div class="bullet-track-fill" id="bulletFill"></div>
+    </div>
+    <div class="bullet-wrap" id="bulletWrap">
+      <svg viewBox="0 0 14 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Casing base (top) -->
+        <rect x="0" y="0" width="14" height="3" rx="1.5" fill="#7A5010"/>
+        <!-- Casing body -->
+        <rect x="1" y="3" width="12" height="18" fill="#A07020"/>
+        <!-- Highlight on casing -->
+        <rect x="2.5" y="5" width="2.5" height="12" rx="1.2" fill="rgba(255,255,255,0.18)"/>
+        <!-- Ogive (bullet nose pointing down) -->
+        <path d="M1,21 L13,21 C13,21 12,32 7,40 C2,32 1,21 1,21 Z" fill="#C89B3C"/>
+        <!-- Highlight on nose -->
+        <path d="M3,23 C3,28 4,33 6,38" stroke="rgba(255,255,255,0.22)" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ─── MOBILE NAV ────────────────────────────────────────────── -->
+  <nav class="nav-mobile" id="mobileNav" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <button class="nav-toggle" id="mobileClose" aria-label="Close navigation" style="position:absolute;top:28px;right:24px;display:flex;">
+      <span style="transform:rotate(45deg) translate(5px, 5px)"></span>
+      <span style="opacity:0"></span>
+      <span style="transform:rotate(-45deg) translate(5px, -5px)"></span>
+    </button>
+    <a href="#services" onclick="closeMobileNav()">Services</a>
+    <a href="#why" onclick="closeMobileNav()">Why Us</a>
+    <a href="#contact" onclick="closeMobileNav()">Contact</a>
+    <a href="#contact" class="nav-mobile-cta" onclick="closeMobileNav()">Enroll Now</a>
+  </nav>
+
+  <!-- ─── NAV ──────────────────────────────────────────────────── -->
+  <header class="nav" id="nav" role="banner">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo" aria-label="Tembo Defensive Institute home" style="flex-direction:row;align-items:center;gap:10px;">
+          <img src="assets/logo-head.png" alt="Tembo Defensive Institute" class="nav-logo-img" />
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#why">Why Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <a href="#contact" class="nav-cta">Enroll Now</a>
+
+        <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ─── HERO ────────────────────────────────────────────────── -->
+    <section class="hero" aria-label="Hero">
+      <div class="hero-bg"></div>
+      <div class="hero-grid"></div>
+
+      <!-- Tactical crosshair decoration -->
+      <div class="hero-reticle" aria-hidden="true">
+        <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="120" cy="120" r="80" stroke="white" stroke-width="1"/>
+          <circle cx="120" cy="120" r="40" stroke="white" stroke-width="1"/>
+          <circle cx="120" cy="120" r="4" fill="white"/>
+          <line x1="120" y1="0" x2="120" y2="75" stroke="white" stroke-width="1"/>
+          <line x1="120" y1="165" x2="120" y2="240" stroke="white" stroke-width="1"/>
+          <line x1="0" y1="120" x2="75" y2="120" stroke="white" stroke-width="1"/>
+          <line x1="165" y1="120" x2="240" y2="120" stroke="white" stroke-width="1"/>
+          <line x1="42" y1="42" x2="58" y2="58" stroke="white" stroke-width="1"/>
+          <line x1="182" y1="42" x2="198" y2="58" stroke="white" stroke-width="1" transform="rotate(90 190 50)"/>
+          <line x1="42" y1="198" x2="58" y2="182" stroke="white" stroke-width="1"/>
+          <line x1="182" y1="198" x2="198" y2="182" stroke="white" stroke-width="1"/>
+          <text x="130" y="108" fill="white" font-size="6" font-family="monospace" opacity="0.6">N</text>
+          <text x="130" y="140" fill="white" font-size="6" font-family="monospace" opacity="0.6">S</text>
+          <text x="106" y="124" fill="white" font-size="6" font-family="monospace" opacity="0.6">W</text>
+          <text x="138" y="124" fill="white" font-size="6" font-family="monospace" opacity="0.6">E</text>
+        </svg>
+      </div>
+
+      <div class="container">
+        <div class="hero-content">
+
+          <div class="hero-badge" id="heroBadge">
+            <span class="hero-badge-dot" aria-hidden="true"></span>
+            NRA Certified Instruction
+          </div>
+
+          <h1 class="hero-title" id="heroTitle">
+            <span class="hero-title-line"><span>Train with</span></span>
+            <span class="hero-title-line"><span><em>Purpose.</em></span></span>
+            <span class="hero-title-line"><span>Shoot with</span></span>
+            <span class="hero-title-line"><span>Confidence.</span></span>
+          </h1>
+
+          <p class="hero-sub" id="heroSub">
+            Professional firearms training for civilians, concealed carry holders, and first responders. Built on discipline, safety, and real-world application.
+          </p>
+
+          <div class="hero-location" id="heroLocation" aria-label="Location: Fort Collins, Colorado">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Fort Collins, Colorado
+          </div>
+
+          <div class="hero-actions" id="heroActions">
+            <a href="#contact" class="btn-primary">
+              Enroll in a Course
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#services" class="btn-ghost">
+              View Services
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+            </a>
+          </div>
+
+          <div class="hero-stats" id="heroStats" aria-label="Key statistics">
+            <div class="hero-stat">
+              <span class="hero-stat-num" data-count="500">0</span><span class="hero-stat-num">+</span>
+              <div class="hero-stat-label">Students Trained</div>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-num" data-count="8">0</span>
+              <div class="hero-stat-label">Courses Offered</div>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-num" data-count="100">0</span><span class="hero-stat-num">%</span>
+              <div class="hero-stat-label">Safety Record</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll" id="heroScroll" aria-hidden="true">
+        <span class="hero-scroll-label">Scroll</span>
+        <div class="hero-scroll-line"></div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ─── SERVICES ──────────────────────────────────────────── -->
+    <section class="services" id="services" aria-labelledby="services-title">
+      <div class="container">
+        <div class="section-eyebrow" aria-hidden="true">
+          <div class="section-eyebrow-line"></div>
+          <span class="section-eyebrow-text">What We Offer</span>
+        </div>
+        <h2 class="section-title" id="services-title">OUR<br>COURSES</h2>
+        <p class="section-sub">Every course is designed around real-world scenarios, taught by certified instructors with field experience.</p>
+
+        <div class="services-grid" role="list">
+
+          <article class="service-card" role="listitem" data-modal="1" tabindex="0" aria-label="Concealed Carry course — click for details">
+            <span class="service-num" aria-hidden="true">01</span>
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="service-title">Concealed Carry (CCW)</h3>
+            <p class="service-desc">Colorado-compliant CCW certification. Covers legal responsibilities, safe handling, situational awareness, and live-fire qualification.</p>
+            <span class="service-arrow" aria-hidden="true">
+              Learn More
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </article>
+
+          <article class="service-card" role="listitem" data-modal="2" tabindex="0" aria-label="Pistol Fundamentals course — click for details">
+            <span class="service-num" aria-hidden="true">02</span>
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+            </div>
+            <h3 class="service-title">Pistol Fundamentals</h3>
+            <p class="service-desc">Foundation course for new and novice shooters. Grip, stance, trigger control, sight alignment, and safe range practices.</p>
+            <span class="service-arrow" aria-hidden="true">
+              Learn More
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </article>
+
+          <article class="service-card" role="listitem" data-modal="3" tabindex="0" aria-label="Defensive Shooting Tactics course — click for details">
+            <span class="service-num" aria-hidden="true">03</span>
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3 class="service-title">Defensive Shooting Tactics</h3>
+            <p class="service-desc">Advanced techniques for high-stress scenarios. Drawing from holster, moving and shooting, low-light environments, and threat assessment.</p>
+            <span class="service-arrow" aria-hidden="true">
+              Learn More
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </article>
+
+          <article class="service-card" role="listitem" data-modal="4" tabindex="0" aria-label="Private and Small Group course — click for details">
+            <span class="service-num" aria-hidden="true">04</span>
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <h3 class="service-title">Private & Small Group</h3>
+            <p class="service-desc">Personalized instruction tailored to your specific goals and skill level. One-on-one or groups up to four students.</p>
+            <span class="service-arrow" aria-hidden="true">
+              Learn More
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </article>
+
+          <article class="service-card" role="listitem" data-modal="5" tabindex="0" aria-label="Women's Defense Program — click for details">
+            <span class="service-num" aria-hidden="true">05</span>
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </div>
+            <h3 class="service-title">Women's Defense Program</h3>
+            <p class="service-desc">A supportive, judgment-free environment designed specifically for women. Focus on personal safety, situational awareness, and confident self-defense.</p>
+            <span class="service-arrow" aria-hidden="true">
+              Learn More
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </article>
+
+          <article class="service-card" role="listitem" data-modal="6" tabindex="0" aria-label="Range Safety Officer course — click for details">
+            <span class="service-num" aria-hidden="true">06</span>
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3 class="service-title">Range Safety Officer</h3>
+            <p class="service-desc">NRA-certified RSO course. Learn to run a safe range, supervise shooters, identify hazards, and respond to emergencies effectively.</p>
+            <span class="service-arrow" aria-hidden="true">
+              Learn More
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ─── VIDEO CANVAS SCROLL ANIMATION ───────────────────── -->
+    <section class="video-section" id="videoSection" aria-label="Training in action">
+      <div class="video-pin" id="videoPin">
+
+        <canvas id="videoCanvas" aria-hidden="true"></canvas>
+
+        <!-- Loading bar -->
+        <div class="video-loader" id="videoLoader">
+          <div class="video-loader-text">Loading</div>
+          <div class="video-loader-bar">
+            <div class="video-loader-fill" id="videoLoaderFill"></div>
+          </div>
+        </div>
+
+        <!-- Text captions keyed to scroll position -->
+        <div class="video-overlay" aria-hidden="true">
+          <div class="video-caption" id="vcap0">
+            <div class="video-caption-eyebrow">Tembo Defensive Institute</div>
+            <div class="video-caption-title">TRAIN WITH<br>PURPOSE</div>
+          </div>
+          <div class="video-caption" id="vcap1" style="display:none">
+            <div class="video-caption-eyebrow">Defensive Skills</div>
+            <div class="video-caption-title">EVERY<br>DETAIL MATTERS</div>
+          </div>
+          <div class="video-caption" id="vcap2" style="display:none">
+            <div class="video-caption-eyebrow">Fort Collins, Colorado</div>
+            <div class="video-caption-title">BUILT FOR<br>THE REAL WORLD</div>
+          </div>
+        </div>
+
+        <div class="video-scroll-hint">Scroll to explore</div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ─── TEXT PRESSURE ─────────────────────────────────────── -->
+    <section class="pressure-section" aria-label="Interactive brand statement">
+      <div class="container">
+        <div class="pressure-inner" id="pressureInner">
+          <div class="pressure-eyebrow" aria-hidden="true">
+            <div class="section-eyebrow-line"></div>
+            <span class="section-eyebrow-text">Move your cursor</span>
+            <div class="section-eyebrow-line"></div>
+          </div>
+          <div class="pressure-wrap" id="pressureText" aria-label="Shoot with confidence"></div>
+          <p class="pressure-touch-hint" aria-hidden="true">Touch to interact</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ─── WHY US ────────────────────────────────────────────── -->
+    <section class="why" id="why" aria-labelledby="why-title">
+      <div class="container">
+        <div class="why-inner">
+
+          <div class="why-visual">
+            <div class="why-visual-card" id="whyCard">
+              <span class="why-big-num" aria-label="10 plus years">10+</span>
+              <div class="why-big-label">Years of Instruction</div>
+              <div class="why-divider"></div>
+              <div class="why-tags" aria-label="Certifications and affiliations">
+                <span class="why-tag">NRA Certified</span>
+                <span class="why-tag">USCCA Member</span>
+                <span class="why-tag">Colorado Compliant</span>
+                <span class="why-tag">First Responder Ready</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="why-content" id="whyContent">
+            <div class="section-eyebrow" aria-hidden="true">
+              <div class="section-eyebrow-line"></div>
+              <span class="section-eyebrow-text">Why Tembo</span>
+            </div>
+            <h2 class="section-title" id="why-title">BUILT ON<br>DISCIPLINE</h2>
+
+            <ul class="why-list" aria-label="Our differentiators">
+              <li class="why-item">
+                <div class="why-item-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                  <div class="why-item-title">Certified Expert Instructors</div>
+                  <p class="why-item-desc">Every course is led by NRA-certified instructors with real-world backgrounds in law enforcement, military, or competitive shooting.</p>
+                </div>
+              </li>
+              <li class="why-item">
+                <div class="why-item-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                  <div class="why-item-title">Small Class Sizes</div>
+                  <p class="why-item-desc">We keep classes intentionally small so every student gets direct feedback and personalized attention on the range.</p>
+                </div>
+              </li>
+              <li class="why-item">
+                <div class="why-item-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                  <div class="why-item-title">Safety-First Culture</div>
+                  <p class="why-item-desc">An unwavering commitment to the four fundamental rules of firearms safety — practiced, enforced, and taught in every session.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ─── CONTACT ───────────────────────────────────────────── -->
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="contact-inner">
+
+          <div class="contact-info" id="contactInfo">
+            <div class="section-eyebrow" aria-hidden="true">
+              <div class="section-eyebrow-line"></div>
+              <span class="section-eyebrow-text">Get in Touch</span>
+            </div>
+            <h2 class="section-title" id="contact-title">READY TO<br>ENROLL?</h2>
+            <p class="section-sub" style="margin-bottom:0">Fill out the form and we'll get back to you within 24 hours to discuss courses and scheduling.</p>
+
+            <div class="contact-detail-list">
+              <div class="contact-detail">
+                <div class="contact-detail-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <div>
+                  <div class="contact-detail-label">Location</div>
+                  <div class="contact-detail-value">Fort Collins, Colorado</div>
+                </div>
+              </div>
+              <div class="contact-detail">
+                <div class="contact-detail-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+                </div>
+                <div>
+                  <div class="contact-detail-label">Email</div>
+                  <div class="contact-detail-value">info@tembofi.com</div>
+                </div>
+              </div>
+              <div class="contact-detail">
+                <div class="contact-detail-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.22 2.18 2 2 0 012.18 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.56-.56a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/></svg>
+                </div>
+                <div>
+                  <div class="contact-detail-label">Phone</div>
+                  <div class="contact-detail-value">(970) 000-0000</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-wrap" id="contactForm">
+            <form id="enrollForm" novalidate aria-label="Enrollment inquiry form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="firstName">First Name<span aria-hidden="true">*</span></label>
+                  <input class="form-input" type="text" id="firstName" name="firstName" placeholder="John" required autocomplete="given-name" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="lastName">Last Name<span aria-hidden="true">*</span></label>
+                  <input class="form-input" type="text" id="lastName" name="lastName" placeholder="Smith" required autocomplete="family-name" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="email">Email Address<span aria-hidden="true">*</span></label>
+                <input class="form-input" type="email" id="email" name="email" placeholder="john@example.com" required autocomplete="email" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="phone">Phone Number</label>
+                <input class="form-input" type="tel" id="phone" name="phone" placeholder="(970) 000-0000" autocomplete="tel" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="course">Course of Interest<span aria-hidden="true">*</span></label>
+                <select class="form-select" id="course" name="course" required>
+                  <option value="" disabled selected>Select a course...</option>
+                  <option value="ccw">Concealed Carry (CCW) Certification</option>
+                  <option value="fundamentals">Pistol Fundamentals</option>
+                  <option value="defensive">Defensive Shooting Tactics</option>
+                  <option value="private">Private / Small Group Training</option>
+                  <option value="womens">Women's Defense Program</option>
+                  <option value="rso">Range Safety Officer</option>
+                  <option value="other">Not Sure — Help Me Choose</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="experience">Experience Level</label>
+                <select class="form-select" id="experience" name="experience">
+                  <option value="" disabled selected>Select your level...</option>
+                  <option value="none">No prior experience</option>
+                  <option value="beginner">Beginner (handled a firearm before)</option>
+                  <option value="intermediate">Intermediate (some range time)</option>
+                  <option value="advanced">Advanced (regular shooter)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="message">Message</label>
+                <textarea class="form-textarea" id="message" name="message" placeholder="Tell us about your goals or any questions you have..."></textarea>
+              </div>
+
+              <button type="submit" class="form-submit" id="submitBtn">
+                <span id="submitText">Send Inquiry</span>
+                <svg id="submitArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </form>
+
+            <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+              <div class="form-success-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="form-success-title">Inquiry Sent</div>
+              <p class="form-success-text">Thank you. We'll be in touch within 24 hours to discuss your training goals.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── FOOTER ────────────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+            <img src="assets/logo-head.png" alt="Tembo Defensive Institute" style="height:52px;width:auto;max-width:44px;display:block;object-fit:contain;" />
+            <div>
+              <div style="font-family:var(--heading);font-size:22px;letter-spacing:0.08em;color:var(--text);line-height:1;">TEMBO</div>
+              <div style="font-family:var(--subheading);font-size:9px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);">Defensive Institute</div>
+            </div>
+          </div>
+          <span class="footer-copy">&copy; <span id="footerYear"></span> Tembo Defensive Institute. All rights reserved.</span>
+        </div>
+        <div class="footer-right">
+          <span>Fort Collins, CO</span>
+          <span style="margin: 0 8px; opacity:0.3">|</span>
+          <a href="#contact">Contact</a>
+          <span style="margin: 0 8px; opacity:0.3">|</span>
+          <a href="#services">Services</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── COURSE MODALS ────────────────────────────────────────── -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+    <!-- 01 CCW -->
+    <div class="modal-box" data-modal="1">
+      <div class="modal-header">
+        <div>
+          <div class="modal-num">Course 01</div>
+          <div class="modal-title" id="modalTitle">Concealed Carry<br>(CCW)</div>
+        </div>
+        <button class="modal-close" id="modalClose" aria-label="Close">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta">
+          <div class="modal-meta-item"><div class="modal-meta-label">Duration</div><div class="modal-meta-val">8 Hours</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Format</div><div class="modal-meta-val">Classroom + Live Fire</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Prereqs</div><div class="modal-meta-val">None — all levels</div></div>
+        </div>
+        <p class="modal-desc">Colorado's concealed carry permit requires demonstrated competency with a handgun and knowledge of state law. This full-day course covers everything you need to carry legally and confidently.</p>
+        <div class="modal-section-title">What You'll Cover</div>
+        <ul class="modal-list">
+          <li>Colorado concealed carry law and legal use of force</li>
+          <li>Safe storage, transportation, and handling</li>
+          <li>Situational awareness and threat recognition</li>
+          <li>Drawing, presenting, and re-holstering safely</li>
+          <li>Live-fire qualification shoot</li>
+          <li>Permit application walkthrough</li>
+        </ul>
+        <div class="modal-bring"><strong>What to bring:</strong> Valid Colorado ID, handgun in good working order, 50 rounds of ammunition, eye and ear protection (loaners available).</div>
+        <a href="#contact" class="modal-cta" onclick="closeModal()">Enroll in This Course &#x2192;</a>
+      </div>
+    </div>
+
+    <!-- 02 Pistol Fundamentals -->
+    <div class="modal-box" data-modal="2" style="display:none">
+      <div class="modal-header">
+        <div>
+          <div class="modal-num">Course 02</div>
+          <div class="modal-title">Pistol<br>Fundamentals</div>
+        </div>
+        <button class="modal-close" aria-label="Close">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta">
+          <div class="modal-meta-item"><div class="modal-meta-label">Duration</div><div class="modal-meta-val">4 Hours</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Format</div><div class="modal-meta-val">Classroom + Range</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Prereqs</div><div class="modal-meta-val">None</div></div>
+        </div>
+        <p class="modal-desc">The foundation every shooter needs. Whether you've never touched a firearm or just want to build proper habits, this course sets you up with the mechanics that matter most.</p>
+        <div class="modal-section-title">What You'll Cover</div>
+        <ul class="modal-list">
+          <li>The four fundamental safety rules</li>
+          <li>Proper grip, stance, and body mechanics</li>
+          <li>Sight alignment and sight picture</li>
+          <li>Trigger control and follow-through</li>
+          <li>Loading, unloading, and malfunction clearing</li>
+          <li>Safe range etiquette and commands</li>
+        </ul>
+        <div class="modal-bring"><strong>What to bring:</strong> Comfortable clothing and closed-toe shoes. Firearms and ammunition provided — or bring your own handgun + 50 rounds.</div>
+        <a href="#contact" class="modal-cta" onclick="closeModal()">Enroll in This Course &#x2192;</a>
+      </div>
+    </div>
+
+    <!-- 03 Defensive Shooting -->
+    <div class="modal-box" data-modal="3" style="display:none">
+      <div class="modal-header">
+        <div>
+          <div class="modal-num">Course 03</div>
+          <div class="modal-title">Defensive Shooting<br>Tactics</div>
+        </div>
+        <button class="modal-close" aria-label="Close">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta">
+          <div class="modal-meta-item"><div class="modal-meta-label">Duration</div><div class="modal-meta-val">6 Hours</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Format</div><div class="modal-meta-val">Range-Based</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Prereqs</div><div class="modal-meta-val">Pistol Fundamentals</div></div>
+        </div>
+        <p class="modal-desc">This is where training gets real. Designed for students who already know the basics, Defensive Shooting Tactics introduces the skills and mindset needed to protect yourself when it counts.</p>
+        <div class="modal-section-title">What You'll Cover</div>
+        <ul class="modal-list">
+          <li>Drawing from a holster under time pressure</li>
+          <li>Shooting on the move — lateral, forward, rearward</li>
+          <li>Low-light and reduced-visibility drills</li>
+          <li>Multiple-target engagement and priority decisions</li>
+          <li>Cover vs. concealment — real-world application</li>
+          <li>Mindset and decision-making under stress</li>
+        </ul>
+        <div class="modal-bring"><strong>What to bring:</strong> Handgun, OWB or IWB holster, 150 rounds of ammunition, eye and ear protection.</div>
+        <a href="#contact" class="modal-cta" onclick="closeModal()">Enroll in This Course &#x2192;</a>
+      </div>
+    </div>
+
+    <!-- 04 Private & Small Group -->
+    <div class="modal-box" data-modal="4" style="display:none">
+      <div class="modal-header">
+        <div>
+          <div class="modal-num">Course 04</div>
+          <div class="modal-title">Private &amp;<br>Small Group</div>
+        </div>
+        <button class="modal-close" aria-label="Close">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta">
+          <div class="modal-meta-item"><div class="modal-meta-label">Duration</div><div class="modal-meta-val">2–8 Hours</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Format</div><div class="modal-meta-val">1-on-1 or Up to 4</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Prereqs</div><div class="modal-meta-val">None</div></div>
+        </div>
+        <p class="modal-desc">Private instruction at your pace, focused entirely on your goals. Whether you're a complete beginner, preparing for a qualification, or dialing in an advanced skill, we build the curriculum around you.</p>
+        <div class="modal-section-title">Popular Private Session Goals</div>
+        <ul class="modal-list">
+          <li>First-time firearm introduction for new owners</li>
+          <li>Competition prep and accuracy coaching</li>
+          <li>CCW qualification practice</li>
+          <li>Overcoming bad habits from self-teaching</li>
+          <li>Family or couple's intro sessions</li>
+          <li>Executive and travel-party protection briefings</li>
+        </ul>
+        <div class="modal-bring"><strong>Scheduling:</strong> Sessions available 7 days a week by appointment. Contact us to describe your goals and we'll design the right session.</div>
+        <a href="#contact" class="modal-cta" onclick="closeModal()">Book a Private Session &#x2192;</a>
+      </div>
+    </div>
+
+    <!-- 05 Women's Defense -->
+    <div class="modal-box" data-modal="5" style="display:none">
+      <div class="modal-header">
+        <div>
+          <div class="modal-num">Course 05</div>
+          <div class="modal-title">Women's Defense<br>Program</div>
+        </div>
+        <button class="modal-close" aria-label="Close">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta">
+          <div class="modal-meta-item"><div class="modal-meta-label">Duration</div><div class="modal-meta-val">4 Hours</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Format</div><div class="modal-meta-val">Classroom + Range</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Prereqs</div><div class="modal-meta-val">None</div></div>
+        </div>
+        <p class="modal-desc">A women-only environment designed to be welcoming, pressure-free, and genuinely empowering. Our female-forward curriculum focuses on practical self-defense skills and the confidence to use them.</p>
+        <div class="modal-section-title">What You'll Cover</div>
+        <ul class="modal-list">
+          <li>Personal safety planning and situational awareness</li>
+          <li>Choosing the right firearm for your lifestyle</li>
+          <li>Safe firearm handling and storage at home</li>
+          <li>Fundamentals of shooting — grip, aim, trigger</li>
+          <li>Live-fire drills in a supportive environment</li>
+          <li>Legal considerations for home and carry defense</li>
+        </ul>
+        <div class="modal-bring"><strong>What to bring:</strong> No experience or equipment necessary. Everything is provided. Just show up ready to learn.</div>
+        <a href="#contact" class="modal-cta" onclick="closeModal()">Enroll in This Course &#x2192;</a>
+      </div>
+    </div>
+
+    <!-- 06 RSO -->
+    <div class="modal-box" data-modal="6" style="display:none">
+      <div class="modal-header">
+        <div>
+          <div class="modal-num">Course 06</div>
+          <div class="modal-title">Range Safety<br>Officer</div>
+        </div>
+        <button class="modal-close" aria-label="Close">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-meta">
+          <div class="modal-meta-item"><div class="modal-meta-label">Duration</div><div class="modal-meta-val">8 Hours</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Format</div><div class="modal-meta-val">NRA Certified</div></div>
+          <div class="modal-meta-item"><div class="modal-meta-label">Prereqs</div><div class="modal-meta-val">Basic safety knowledge</div></div>
+        </div>
+        <p class="modal-desc">Earn your NRA Range Safety Officer certification and be qualified to run safe, efficient ranges at clubs, competitions, or public facilities. This course is also ideal for firearm instructors looking to expand their credentials.</p>
+        <div class="modal-section-title">What You'll Cover</div>
+        <ul class="modal-list">
+          <li>NRA range standard operating procedures</li>
+          <li>Supervising and commanding shooters on the line</li>
+          <li>Hazard identification and risk mitigation</li>
+          <li>Emergency response — ceasefire, injuries, misfires</li>
+          <li>Handling prohibited or unsafe firearms</li>
+          <li>Written exam + practical range evaluation</li>
+        </ul>
+        <div class="modal-bring"><strong>Certification:</strong> Graduates receive NRA RSO credentials valid nationwide. Certificate issued same day upon passing.</div>
+        <a href="#contact" class="modal-cta" onclick="closeModal()">Enroll in This Course &#x2192;</a>
+      </div>
+    </div>
+
+  </div><!-- /modal-overlay -->
+
+  <!-- ─── SCRIPTS ───────────────────────────────────────────────── -->
+  <script>
+    /* ── Footer year ── */
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+    /* ── Nav scroll behavior ── */
+    const nav = document.getElementById('nav');
+    const onScroll = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ── Mobile nav ── */
+    const mobileNav = document.getElementById('mobileNav');
+    const navToggle = document.getElementById('navToggle');
+    const mobileClose = document.getElementById('mobileClose');
+
+    function openMobileNav() {
+      mobileNav.classList.add('open');
+      navToggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileNav() {
+      mobileNav.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    navToggle.addEventListener('click', openMobileNav);
+    mobileClose.addEventListener('click', closeMobileNav);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) closeMobileNav();
+    });
+
+    /* ── Counter animation ── */
+    function animateCounter(el, target, duration = 1600) {
+      const start = performance.now();
+      const update = (time) => {
+        const elapsed = time - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target);
+        if (progress < 1) requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+    }
+
+    /* ── Intersection Observer for scroll animations ── */
+    const observerConfig = { threshold: 0.15, rootMargin: '0px 0px -40px 0px' };
+
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.transition = 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)';
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'none';
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, observerConfig);
+
+    /* Service cards stagger */
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach((card, i) => {
+      card.style.transitionDelay = `${i * 60}ms`;
+      fadeObserver.observe(card);
+    });
+
+    /* Why section */
+    const whyCard = document.getElementById('whyCard');
+    const whyContent = document.getElementById('whyContent');
+    if (whyCard) fadeObserver.observe(whyCard);
+    if (whyContent) fadeObserver.observe(whyContent);
+
+    /* Contact */
+    const contactInfo = document.getElementById('contactInfo');
+    const contactForm = document.getElementById('contactForm');
+    if (contactInfo) fadeObserver.observe(contactInfo);
+    if (contactForm) {
+      contactForm.style.transitionDelay = '100ms';
+      fadeObserver.observe(contactForm);
+    }
+
+    /* ── Hero animation sequence (runs on load) ── */
+    window.addEventListener('load', () => {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReduced) {
+        // Just show everything instantly
+        document.querySelectorAll('.hero-badge, .hero-sub, .hero-location, .hero-actions, .hero-stats, .hero-scroll').forEach(el => {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+        document.querySelectorAll('.hero-title-line span').forEach(el => {
+          el.style.transform = 'none';
+        });
+        return;
+      }
+
+      const delay = (ms) => new Promise(res => setTimeout(res, ms));
+      const easeOut = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+      const animate = async () => {
+        // Badge
+        await delay(200);
+        const badge = document.getElementById('heroBadge');
+        badge.style.transition = `opacity 0.6s ${easeOut}, transform 0.6s ${easeOut}`;
+        badge.style.opacity = '1';
+        badge.style.transform = 'none';
+
+        // Title lines stagger
+        await delay(100);
+        const lines = document.querySelectorAll('.hero-title-line span');
+        lines.forEach((line, i) => {
+          setTimeout(() => {
+            line.style.transition = `transform 0.8s ${easeOut}`;
+            line.style.transform = 'translateY(0)';
+          }, i * 90);
+        });
+
+        // Sub
+        await delay(lines.length * 90 + 200);
+        const sub = document.getElementById('heroSub');
+        sub.style.transition = `opacity 0.7s ${easeOut}, transform 0.7s ${easeOut}`;
+        sub.style.opacity = '1';
+        sub.style.transform = 'none';
+
+        // Location
+        await delay(80);
+        const loc = document.getElementById('heroLocation');
+        loc.style.transition = `opacity 0.6s ${easeOut}, transform 0.6s ${easeOut}`;
+        loc.style.opacity = '1';
+        loc.style.transform = 'none';
+
+        // Actions
+        await delay(80);
+        const actions = document.getElementById('heroActions');
+        actions.style.transition = `opacity 0.7s ${easeOut}, transform 0.7s ${easeOut}`;
+        actions.style.opacity = '1';
+        actions.style.transform = 'none';
+
+        // Stats
+        await delay(150);
+        const stats = document.getElementById('heroStats');
+        stats.style.transition = `opacity 0.7s ${easeOut}, transform 0.7s ${easeOut}`;
+        stats.style.opacity = '1';
+        stats.style.transform = 'none';
+
+        // Animate counters
+        document.querySelectorAll('[data-count]').forEach(el => {
+          animateCounter(el, parseInt(el.dataset.count));
+        });
+
+        // Scroll indicator
+        await delay(400);
+        const scroll = document.getElementById('heroScroll');
+        if (scroll) {
+          scroll.style.transition = `opacity 0.6s ${easeOut}`;
+          scroll.style.opacity = '1';
+        }
+      };
+
+      animate();
+    });
+
+    /* ── Form submission ── */
+    const form = document.getElementById('enrollForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitArrow = document.getElementById('submitArrow');
+    const formSuccess = document.getElementById('formSuccess');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validation
+      let valid = true;
+      const required = form.querySelectorAll('[required]');
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      function markInvalid(field) {
+        valid = false;
+        field.classList.add('field-error');
+        field.addEventListener('input', () => field.classList.remove('field-error'), { once: true });
+      }
+
+      required.forEach(field => {
+        if (!field.value.trim()) { markInvalid(field); return; }
+        if (field.type === 'email' && !emailRe.test(field.value.trim())) markInvalid(field);
+      });
+
+      if (!valid) return;
+
+      // Loading state
+      submitBtn.classList.add('loading');
+      submitText.textContent = 'Sending...';
+      submitArrow.style.opacity = '0';
+
+      // Simulate async submit (replace with real endpoint)
+      await new Promise(res => setTimeout(res, 1400));
+
+      // Show success
+      form.style.display = 'none';
+      formSuccess.classList.add('show');
+    });
+
+    /* ── Smooth anchor scroll ── */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const target = document.querySelector(anchor.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ── Bullet scroll indicator ── */
+    const bulletWrap = document.getElementById('bulletWrap');
+    const bulletFill = document.getElementById('bulletFill');
+
+    function updateBullet() {
+      const scrolled = window.scrollY;
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const progress = Math.min(scrolled / maxScroll, 1);
+      const trackH = window.innerHeight * 0.84; // 84vh usable (10% top + bottom padding each side + a bit)
+      const topOffset = window.innerHeight * 0.08;
+      bulletWrap.style.top = (topOffset + trackH * progress) + 'px';
+      bulletFill.style.height = (progress * 100) + '%';
+    }
+
+    window.addEventListener('scroll', updateBullet, { passive: true });
+    updateBullet();
+
+    /* ── Video Canvas Frame Scrubbing ── */
+    (function () {
+      const FRAME_COUNT = 145;
+      const SCROLL_DISTANCE = 5000; // px of scroll pinned to this section
+
+      const canvas = document.getElementById('videoCanvas');
+      const ctx = canvas.getContext('2d');
+      const loader = document.getElementById('videoLoader');
+      const loaderFill = document.getElementById('videoLoaderFill');
+      const section = document.getElementById('videoSection');
+      const pin = document.getElementById('videoPin');
+
+      const captions = [
+        document.getElementById('vcap0'),
+        document.getElementById('vcap1'),
+        document.getElementById('vcap2'),
+      ];
+
+      // Caption breakpoints (0–1 scroll progress within section)
+      const captionRanges = [
+        [0, 0.30],
+        [0.32, 0.64],
+        [0.66, 1.0],
+      ];
+
+      let frames = [];
+      let loadedCount = 0;
+      let ready = false;
+      let currentFrame = 0;
+      let rafId = null;
+      let needsDraw = false;
+
+      // Size canvas to viewport
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        if (ready && frames[currentFrame]) drawFrame(currentFrame);
+      }
+
+      function drawFrame(index) {
+        const img = frames[index];
+        if (!img || !img.complete) return;
+
+        const cw = canvas.width, ch = canvas.height;
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+
+        // Cover: fill canvas entirely, crop excess (no letterboxing)
+        const scale = Math.max(cw / iw, ch / ih);
+        const dw = iw * scale, dh = ih * scale;
+        const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.drawImage(img, dx, dy, dw, dh);
+      }
+
+      function updateCaptions(progress) {
+        captionRanges.forEach((range, i) => {
+          const active = progress >= range[0] && progress <= range[1];
+          const el = captions[i];
+          if (!el) return;
+          el.style.display = 'block';
+          // Small delay before toggling class so display:block renders first
+          requestAnimationFrame(() => {
+            el.classList.toggle('visible', active);
+          });
+        });
+      }
+
+      function onScroll() {
+        if (!ready) return;
+
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+        const scrolled = window.scrollY - sectionTop;
+        const progress = Math.max(0, Math.min(1, scrolled / SCROLL_DISTANCE));
+
+        const frameIndex = Math.min(
+          Math.floor(progress * (FRAME_COUNT - 1)),
+          FRAME_COUNT - 1
+        );
+
+        updateCaptions(progress);
+
+        if (frameIndex !== currentFrame) {
+          currentFrame = frameIndex;
+          needsDraw = true;
+        }
+
+        if (needsDraw && !rafId) {
+          rafId = requestAnimationFrame(() => {
+            drawFrame(currentFrame);
+            needsDraw = false;
+            rafId = null;
+          });
+        }
+      }
+
+      // Preload all frames
+      function preload() {
+        for (let i = 0; i < FRAME_COUNT; i++) {
+          const img = new Image();
+          const padded = String(i).padStart(4, '0');
+          img.src = `assets/frames/frame_${padded}.jpg`;
+          img.onload = () => {
+            loadedCount++;
+            loaderFill.style.width = (loadedCount / FRAME_COUNT * 100) + '%';
+            if (loadedCount === FRAME_COUNT) onAllLoaded();
+          };
+          img.onerror = () => { loadedCount++; }; // skip failed frames
+          frames[i] = img;
+        }
+      }
+
+      function onAllLoaded() {
+        ready = true;
+        loader.classList.add('hidden');
+        drawFrame(0);
+
+        // Pin section with GSAP ScrollTrigger if available
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+          gsap.registerPlugin(ScrollTrigger);
+          ScrollTrigger.create({
+            trigger: '#videoSection',
+            start: 'top top',
+            end: `+=${SCROLL_DISTANCE}`,
+            pin: '#videoPin',
+            anticipatePin: 1,
+            pinSpacing: true,
+            onUpdate: self => {
+              const frameIndex = Math.min(
+                Math.floor(self.progress * (FRAME_COUNT - 1)),
+                FRAME_COUNT - 1
+              );
+              updateCaptions(self.progress);
+              if (frameIndex !== currentFrame) {
+                currentFrame = frameIndex;
+                drawFrame(currentFrame);
+              }
+            }
+          });
+        } else {
+          // Fallback: plain scroll listener
+          window.addEventListener('scroll', onScroll, { passive: true });
+          onScroll();
+        }
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      preload();
+    })();
+
+    /* ── TextPressure ── */
+    (function () {
+      const TEXT    = 'SHOOT WITH CONFIDENCE';
+      const MAX_DIST  = 280;   // px influence radius
+      const MIN_WEIGHT = 100;
+      const MAX_WEIGHT = 950;
+      const MIN_WIDTH  = 60;
+      const MAX_WIDTH  = 130;
+      const MIN_SLNT   = 0;
+      const MAX_SLNT   = -10;  // negative = italic slant in Roboto Flex
+
+      const wrap = document.getElementById('pressureText');
+      if (!wrap) return;
+
+      // Inject one <span> per character
+      ;[...TEXT].forEach(ch => {
+        const span = document.createElement('span');
+        span.className = 'tp-char';
+        span.textContent = ch === ' ' ? '\u00A0' : ch;
+        // Space chars get slightly less width variation so words don't collapse
+        span.dataset.space = ch === ' ' ? '1' : '0';
+        wrap.appendChild(span);
+      });
+
+      const chars = [...wrap.querySelectorAll('.tp-char')];
+
+      let mouseX = -9999, mouseY = -9999;
+      let touchActive = false;
+      let lastRaf = null;
+      let prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      window.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        touchActive = false;
+      }, { passive: true });
+
+      window.addEventListener('touchmove', e => {
+        const t = e.touches[0];
+        mouseX = t.clientX;
+        mouseY = t.clientY;
+        touchActive = true;
+      }, { passive: true });
+
+      window.addEventListener('touchend', () => {
+        // Gradually reset when touch ends — done naturally via rAF since mouse stays at last pos
+      }, { passive: true });
+
+      // Smoothstep: ease-in-out curve for organic feel
+      function smoothstep(t) { return t * t * (3 - 2 * t); }
+
+      function tick() {
+        lastRaf = requestAnimationFrame(tick);
+
+        // If reduced motion, skip
+        if (prefersReduced) {
+          chars.forEach(s => { s.style.fontVariationSettings = `'wght' ${MIN_WEIGHT}, 'wdth' ${MIN_WIDTH}, 'slnt' ${MIN_SLNT}`; });
+          cancelAnimationFrame(lastRaf);
+          return;
+        }
+
+        chars.forEach(span => {
+          const rect = span.getBoundingClientRect();
+          const cx = rect.left + rect.width  / 2;
+          const cy = rect.top  + rect.height / 2;
+          const dx = mouseX - cx;
+          const dy = mouseY - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          // t: 1 = cursor directly on char, 0 = beyond maxDist
+          const raw = Math.max(0, 1 - dist / MAX_DIST);
+          const t   = smoothstep(raw);
+
+          const weight = Math.round(MIN_WEIGHT + t * (MAX_WEIGHT - MIN_WEIGHT));
+          const width  = Math.round(MIN_WIDTH  + t * (MAX_WIDTH  - MIN_WIDTH));
+          const slnt   = +(MIN_SLNT + t * (MAX_SLNT - MIN_SLNT)).toFixed(2);
+
+          span.style.fontVariationSettings =
+            `'wght' ${weight}, 'wdth' ${width}, 'slnt' ${slnt}`;
+        });
+      }
+
+      // Wire up scroll-in animation for the whole block
+      const inner = document.getElementById('pressureInner');
+      if (inner) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              inner.style.transition = 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)';
+              inner.style.opacity = '1';
+              inner.style.transform = 'none';
+              observer.unobserve(inner);
+            }
+          });
+        }, { threshold: 0.2 });
+        observer.observe(inner);
+      }
+
+      // Start the loop
+      tick();
+    })();
+
+    /* ── Course Modal System ── */
+    (function () {
+      const overlay = document.getElementById('modalOverlay');
+      const allBoxes = overlay.querySelectorAll('.modal-box');
+
+      function openModal(num) {
+        // Hide all boxes, show the right one
+        allBoxes.forEach(b => b.style.display = 'none');
+        const target = overlay.querySelector(`.modal-box[data-modal="${num}"]`);
+        if (!target) return;
+        target.style.display = 'block';
+        target.scrollTop = 0;
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        // Focus the close button for accessibility
+        const closeBtn = target.querySelector('.modal-close');
+        if (closeBtn) setTimeout(() => closeBtn.focus(), 50);
+      }
+
+      function closeModal() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      // Expose closeModal globally (used in onclick attributes)
+      window.closeModal = closeModal;
+
+      // Service card clicks
+      document.querySelectorAll('.service-card[data-modal]').forEach(card => {
+        card.addEventListener('click', () => openModal(card.dataset.modal));
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card.dataset.modal); }
+        });
+      });
+
+      // All close buttons inside modals
+      overlay.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', closeModal);
+      });
+
+      // Click outside modal box to close
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) closeModal();
+      });
+
+      // Escape key
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+      });
+    })();
+  </script>
+
+</body>
+</html>

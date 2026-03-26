@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(curl -s \"https://summitarms-kswqutfh.manus.space\")",
+      "Read(//Users/ianbearss/Desktop/**)",
+      "Read(//private/tmp/**)",
+      "Read(//Users/ianbearss/Downloads/**)",
+      "Bash(ffprobe -v quiet -print_format json -show_streams -show_format \"/Users/ianbearss/Desktop/websites/646f291c03425b20f9d7f28743a92d17_1774503183_cgtohuto.mp4\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); fmt=d[''''format'''']; print\\(f''''Duration: {float\\(fmt[\"\"duration\"\"]\\):.2f}s''''\\); print\\(f''''Size: {int\\(fmt[\"\"size\"\"]\\)//1024//1024}MB''''\\)\")",
+      "Bash(ffprobe -v error -select_streams v:0 -show_entries stream=duration,r_frame_rate -show_entries format=duration,size -of default \"/Users/ianbearss/Desktop/websites/646f291c03425b20f9d7f28743a92d17_1774503183_cgtohuto.mp4\")",
+      "Bash(brew list:*)",
+      "Bash(python3 -c \":*)"
+    ]
+  }
+}
